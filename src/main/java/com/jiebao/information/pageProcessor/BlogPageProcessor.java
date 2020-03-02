@@ -2,7 +2,6 @@ package com.jiebao.information.pageProcessor;
 
 import com.jiebao.information.model.Inform;
 import com.jiebao.information.service.InformService;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
@@ -18,11 +17,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-
+@Component
 public class BlogPageProcessor implements PageProcessor {
 
     @Autowired
     private InformService informService;
+
+
 
     /**
      * 抓取网站的相关配置，包括：编码、抓取间隔、重试次数等
@@ -104,7 +105,10 @@ public class BlogPageProcessor implements PageProcessor {
 
             //保存到数据库
             //informs.add(inform);
-           informService.saveBlog(inform);
+
+
+
+            informService.saveOrUpdate(inform);
 
         }
 
@@ -122,14 +126,17 @@ public class BlogPageProcessor implements PageProcessor {
 
 
 
+    public void start(BlogPageProcessor blogPageProcessor){
 
-    public static void main(String[] args) {
         long startTime, endTime;
         System.out.println("========爬虫【启动】！=========");
         startTime = System.currentTimeMillis();
-        Spider.create(new BlogPageProcessor()).addUrl("https://blog.hellobi.com/hot/weekly?page=1").thread(5).run();
+        Spider.create(blogPageProcessor).addUrl("https://blog.hellobi.com/hot/weekly?page=1").thread(5).run();
         endTime = System.currentTimeMillis();
         System.out.println("========爬虫【结束】！=========");
         System.out.println("一共爬到" + num + "篇博客！用时为：" + (endTime - startTime) / 1000 + "s");
     }
+
+
+
 }

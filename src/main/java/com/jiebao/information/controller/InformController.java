@@ -1,28 +1,31 @@
 package com.jiebao.information.controller;
 
 
-import com.central.common.model.Result;
 import com.jiebao.information.model.Inform;
 import com.jiebao.information.pageProcessor.BlogPageProcessor;
 import com.jiebao.information.service.InformService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Spider;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
 import java.util.List;
 
 
 @Slf4j
-@Controller
-public class InformController {
+@RestController
+public class InformController  {
 
     @Autowired
     InformService informService;
+
+    @Autowired
+    BlogPageProcessor blogPageProcessor;
+
+
 
     @ResponseBody
     @GetMapping("/selectAll")
@@ -31,12 +34,13 @@ public class InformController {
         return informService.list();
     }
 
-    @GetMapping("/conInform")
-    public Result conInform(){
-
-
-        return Result.succeed("dd");
+    @GetMapping("/")
+    public String index() {
+        new Thread(() -> blogPageProcessor.start(blogPageProcessor)).start();
+blogPageProcessor.toString();
+        return "爬虫开启";
     }
+
 
 
 }

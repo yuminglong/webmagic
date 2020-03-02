@@ -13,8 +13,5 @@ import org.springframework.stereotype.Service;
 @Service
 public class InformServiceImpl extends ServiceImpl<InformMapper,Inform> implements InformService {
 
-    @Override
-    public boolean saveBlog(Inform inform) {
-        return baseMapper.saveBlog(inform);
-    }
+
 }
